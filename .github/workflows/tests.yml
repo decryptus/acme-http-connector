@@ -1,0 +1,25 @@
+name: Tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - python: '3.10'
+            certbot: 'certbot==2.11.*'
+            acme: 'acme==2.11.*'
+          - python: '3.12'
+            certbot: 'certbot>=5,<6'
+            acme: 'acme>=5,<6'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -e . pytest build '${{ matrix.certbot }}' '${{ matrix.acme }}'
+      - run: python -m pytest -q
+      - run: certbot plugins --prepare --config-dir /tmp/certbot-config --work-dir /tmp/certbot-work --logs-dir /tmp/certbot-logs --certbot-httpreq:auth-config "$PWD/certbot-httpreq.yml" --certbot-httpreq:installer-config "$PWD/certbot-httpreq.yml"
+      - run: python -m build
