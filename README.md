@@ -110,3 +110,27 @@ certbot plugins
 ```
 
 Copyright © 2019–2026 Adrien Delle Cave. GPL-3.0-or-later.
+
+## Publishing (maintainers)
+
+GitHub Actions publishes the existing **certbot-httpreq** distribution using
+PyPI Trusted Publishing, without a long-lived API token. Configure the publisher
+on that PyPI project with these exact values:
+
+| Setting | Value |
+| --- | --- |
+| Owner | `decryptus` |
+| Repository | `acme-http-connector` |
+| Workflow | `publish.yml` |
+| Environment | `pypi` |
+
+For a release, first synchronize `VERSION`, `RELEASE` and `setup.yml`, finalize
+the top `CHANGELOG` entry (replace `UNRELEASED` with `unstable`) and update the
+README's development status. Merge those changes, then publish a non-prerelease
+GitHub Release tagged `v<version>` at that commit. The workflow checks version
+consistency, runs tests, builds and validates distributions, then uploads the
+same artifacts in a separate OIDC-enabled job.
+
+A manual **Run workflow** only builds and validates; it never publishes.
+Pull requests changing the publishing workflow also validate without uploading
+to PyPI. Version 0.0.20 remains unreleased until the release steps above are done.
