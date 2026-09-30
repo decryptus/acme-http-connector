@@ -2,7 +2,7 @@
 
 Connect ACME clients to your HTTP APIs.
 
-**Current adapter: Certbot. Development version: 0.0.20 (unreleased).**
+**Current adapter: Certbot. Version: 0.0.20.**
 Previously named **certbot-httpreq**. The Python distribution and Certbot plugin
 names remain `certbot-httpreq` for compatibility. Other clients are planned,
 not implemented; see [ROADMAP.md](ROADMAP.md).
@@ -23,8 +23,7 @@ python -m pip install certbot-httpreq
 certbot plugins
 ```
 
-PyPI installation uses the last published release. To test this development
-version from a checkout:
+PyPI installation uses the last published release. To install from a source checkout:
 
 ```sh
 python -m pip install -e .
@@ -133,4 +132,4 @@ same artifacts in a separate OIDC-enabled job.
 
 A manual **Run workflow** only builds and validates; it never publishes.
 Pull requests changing the publishing workflow also validate without uploading
-to PyPI. Version 0.0.20 remains unreleased until the release steps above are done.
+to PyPI.
