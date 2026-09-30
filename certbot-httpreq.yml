@@ -15,9 +15,9 @@ perform:
   ### perform HTTP custom headers
   headers: {}
   ### perform HTTP connection timeout
-  timeout: ~
+  timeout: 30
   ### perform HTTP SSL verify
-  verify: ~
+  verify: true
 cleanup:
   ### cleanup HTTP uri ###
   uri: http://localhost
@@ -32,9 +32,9 @@ cleanup:
   ### cleanup HTTP custom headers
   headers: {}
   ### cleanup HTTP connection timeout
-  timeout: ~
+  timeout: 30
   ### cleanup HTTP SSL verify
-  verify: ~
+  verify: true
 
 # installer
 deploy:
@@ -55,6 +55,6 @@ deploy:
   ### deploy HTTP custom headers
   headers: {}
   ### deploy HTTP connection timeout
-  timeout: ~
+  timeout: 30
   ### deploy HTTP SSL verify
-  verify: ~
+  verify: true

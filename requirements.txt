@@ -1,6 +1,5 @@
-acme>=0.1.1
-certbot>=0.9.3
-pyOpenSSL
-requests>=2.4
+acme>=2.11,<6
+certbot>=2.11,<6
+requests>=2.28
 sonicprobe>=0.3.48
-zope.interface
+PyYAML>=6

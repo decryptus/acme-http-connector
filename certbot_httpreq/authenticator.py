@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2019-2022 Adrien Delle Cave
+# Copyright 2019-2026 Adrien Delle Cave
 # SPDX-License-Identifier: GPL-3.0-or-later
 """HTTP Requests Let's Encrypt authenticator plugin."""
 import os
@@ -11,10 +11,10 @@ from acme import challenges
 from sonicprobe import helpers
 from sonicprobe.libs import urisup
 
-import zope.interface
-
-from certbot import interfaces
+from certbot import interfaces, errors
 from certbot.plugins import common
+
+from certbot_httpreq.config import set_option
 
 
 LOG = logging.getLogger("certbot-httpreq")
@@ -23,9 +23,7 @@ PERFORM_ALLOWED_HTTP_METHODS = ('put', 'post')
 CLEANUP_ALLOWED_HTTP_METHODS = ('put', 'post', 'delete')
 
 
-@zope.interface.implementer(interfaces.IAuthenticator)
-@zope.interface.provider(interfaces.IPluginFactory)
-class Authenticator(common.Plugin):
+class Authenticator(common.Plugin, interfaces.Authenticator):
     description = "HTTP Server Authenticator"
 
     @classmethod
@@ -51,10 +49,7 @@ class Authenticator(common.Plugin):
 
         return uri
 
-    @staticmethod
-    def _set_option(conf, xtype, name, default = None):
-        if not conf.get(name):
-            conf[name] = os.getenv("CBT_HTTPREQ_%s_%s" % (xtype.upper(), name.upper())) or default
+    _set_option = staticmethod(set_option)
 
     def prepare(self):  # pylint: disable=missing-docstring,no-self-use
         self._config = helpers.load_conf_yaml_file(self.conf('config'))
@@ -97,6 +92,7 @@ class Authenticator(common.Plugin):
     def _build_uri(self, achall, xtype = 'perform'):   # pylint: disable=missing-docstring
         key = achall.chall.path
         uri = list(self._uri[xtype])
+        uri[3] = list(uri[3])
 
         if self._config[xtype]['param_challenge']:
             uri[3] += [(self._config[xtype]['param_challenge'], key)]
@@ -121,8 +117,7 @@ class Authenticator(common.Plugin):
         json    = None
 
         if method not in PERFORM_ALLOWED_HTTP_METHODS:
-            LOG.error("invalid HTTP method for perform: %r", method)
-            return None
+            raise errors.PluginError("Invalid HTTP method for perform: %s" % method)
 
         if self._config['perform']['param_validation']:
             data = {self._config['perform']['param_validation']: validation}
@@ -130,7 +125,7 @@ class Authenticator(common.Plugin):
             data = validation
 
         if isinstance(self._config['perform'].get('headers'), dict):
-            headers = self._config['perform']['headers']
+            headers = dict(self._config['perform']['headers'])
 
         if self._config['perform']['format'] == 'json':
             headers['Content-Type'] = 'application/json'
@@ -160,11 +155,10 @@ class Authenticator(common.Plugin):
         headers = {}
 
         if method not in CLEANUP_ALLOWED_HTTP_METHODS:
-            LOG.error("invalid HTTP method for cleanup: %r", method)
-            return None
+            raise errors.PluginError("Invalid HTTP method for cleanup: %s" % method)
 
         if isinstance(self._config['cleanup'].get('headers'), dict):
-            headers = self._config['cleanup']['headers']
+            headers = dict(self._config['cleanup']['headers'])
 
         if self._config['cleanup']['format'] == 'json':
             headers['Content-Type'] = 'application/json'
@@ -172,8 +166,8 @@ class Authenticator(common.Plugin):
         for achall in achalls:
             req = getattr(requests, method)(self._build_uri(achall, 'cleanup'),
                                             headers = headers,
-                                            timeout = self._config['perform']['timeout'],
-                                            verify  = self._config['perform']['verify'])
+                                            timeout = self._config['cleanup']['timeout'],
+                                            verify  = self._config['cleanup']['verify'])
 
             req.raise_for_status()
 

@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
-# Copyright 2019-2022 Adrien Delle Cave
+# Copyright 2019-2026 Adrien Delle Cave
 # SPDX-License-Identifier: GPL-3.0-or-later
 """HTTP Requests Let's Encrypt installer plugin."""
 
-from __future__ import print_function
-
 import os
+from pathlib import Path
 import logging
 import requests
 
 from sonicprobe import helpers
 from sonicprobe.libs import urisup
 
-import zope.interface
-
-from certbot import interfaces
+from certbot import interfaces, errors
 from certbot.plugins import common
+
+from certbot_httpreq.config import set_option
 
 LOG = logging.getLogger("certbot-httpreq")
 
@@ -24,9 +23,7 @@ ALLOWED_HTTP_METHODS = ('put', 'post', 'patch')
 HTTP_BODY_PARAMS = ('domain', 'cert', 'key', 'chain')
 
 
-@zope.interface.implementer(interfaces.IInstaller)
-@zope.interface.provider(interfaces.IPluginFactory)
-class Installer(common.Plugin):
+class Installer(common.Plugin, interfaces.Installer):
     description = "HTTP Requests Installer"
 
     @classmethod
@@ -43,10 +40,7 @@ class Installer(common.Plugin):
     def _build_uri(self):  # pylint: disable=missing-docstring
         return urisup.uri_help_unsplit(self._uri)
 
-    @staticmethod
-    def _set_option(conf, xtype, name, default = None):
-        if not conf.get(name):
-            conf[name] = os.getenv("CBT_HTTPREQ_%s_%s" % (xtype.upper(), name.upper())) or default
+    _set_option = staticmethod(set_option)
 
     def prepare(self):  # pylint: disable=missing-docstring,no-self-use
         self._config = helpers.load_conf_yaml_file(self.conf('config'))
@@ -79,8 +73,7 @@ class Installer(common.Plugin):
         method  = self._config['deploy']['method'].lower()
 
         if method not in ALLOWED_HTTP_METHODS:
-            LOG.error("invalid HTTP method for deploy: %r", method)
-            return None
+            raise errors.PluginError("Invalid HTTP method for deploy: %s" % method)
 
         params = dict(zip(HTTP_BODY_PARAMS, HTTP_BODY_PARAMS))
 
@@ -91,13 +84,13 @@ class Installer(common.Plugin):
 
         headers = {}
         data    = {params['domain']: domain,
-                   params['cert']: open(cert_path, 'r').read(),
-                   params['key']: open(key_path, 'r').read(),
-                   params['chain']:  open(chain_path, 'r').read()}
+                   params['cert']: Path(cert_path).read_text(),
+                   params['key']: Path(key_path).read_text(),
+                   params['chain']:  Path(chain_path).read_text() if chain_path else ''}
         json    = None
 
         if isinstance(self._config['deploy'].get('headers'), dict):
-            headers = self._config['deploy']['headers']
+            headers = dict(self._config['deploy']['headers'])
 
         if self._config['deploy']['format'] == 'json':
             headers['Content-Type'] = 'application/json'

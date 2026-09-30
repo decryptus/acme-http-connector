@@ -1,0 +1,1 @@
+include requirements.txt setup.yml certbot-httpreq.yml VERSION RELEASE CHANGELOG README.md ROADMAP.md LICENSE

@@ -8,3 +8,6 @@ build/
 dist/
 docs/_build/
 TODO
+
+.pytest_cache/
+.venv/

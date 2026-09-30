@@ -24,7 +24,7 @@ setup_cfg    = yaml.safe_load(open(setup_config, 'r').read())
 
 # -- Project information -----------------------------------------------------
 
-project = setup_cfg['name']
+project = 'ACME HTTP Connector'
 copyright = setup_cfg['copyright']
 author = setup_cfg['author']
 
@@ -136,7 +136,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'certbot-httpreq.tex', u'certbot-httpreq Documentation',
+    (master_doc, 'certbot-httpreq.tex', u'ACME HTTP Connector Documentation',
      u'Adrien Delle Cave', 'manual'),
 ]
 
@@ -146,7 +146,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'certbot-httpreq', u'certbot-httpreq Documentation',
+    (master_doc, 'certbot-httpreq', u'ACME HTTP Connector Documentation',
      [author], 1)
 ]
 
@@ -157,7 +157,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'certbot-httpreq', u'certbot-httpreq Documentation',
+    (master_doc, 'certbot-httpreq', u'ACME HTTP Connector Documentation',
      author, 'certbot-httpreq', 'One line description of project.',
      'Miscellaneous'),
 ]

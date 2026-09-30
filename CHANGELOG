@@ -1,3 +1,12 @@
+certbot-httpreq (0.0.20) UNRELEASED; urgency=medium
+
+  * Introduce ACME HTTP Connector project name; preserve Certbot package/API names.
+  * Fix cleanup options, shared challenge parameters and environment value parsing.
+  * Default to TLS verification and a 30-second HTTP timeout.
+  * Update Certbot interfaces, Python support, tests, documentation and copyrights.
+
+ -- Adrien DELLE CAVE (Decryptus) <adc@doowan.net>  Wed, 30 Sep 2026 18:54:00 +0200
+
 certbot-httpreq (0.0.19) unstable; urgency=medium
 
   * Reviewed documentation.
