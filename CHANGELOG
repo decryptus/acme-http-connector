@@ -1,4 +1,4 @@
-certbot-httpreq (0.0.20) UNRELEASED; urgency=medium
+certbot-httpreq (0.0.20) unstable; urgency=medium
 
   * Introduce ACME HTTP Connector project name; preserve Certbot package/API names.
   * Fix cleanup options, shared challenge parameters and environment value parsing.
