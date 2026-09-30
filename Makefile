@@ -81,10 +81,12 @@ git-release:
 	$(MAKE_PATH) push-git-release
 
 build-pip3: clean-pip
-	$(PYTHON3_PATH) -m build
+	$(PYTHON3_PATH) -m build packages/core --outdir dist/core
+	$(PYTHON3_PATH) -m build --outdir dist/adapter
 
 push-pip3:
-	$(TWINE_PATH) upload dist/*
+	$(TWINE_PATH) upload dist/core/*
+	$(TWINE_PATH) upload dist/adapter/*
 
 push-pip:
 	$(MAKE_PATH) build-pip3

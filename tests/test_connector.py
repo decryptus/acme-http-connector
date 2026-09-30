@@ -60,7 +60,7 @@ def test_multiple_challenges_do_not_leak_query_parameters(tmp_path):
 def test_cleanup_uses_own_settings(tmp_path, monkeypatch):
     auth = plugin(Authenticator, tmp_path, 'perform:\n  timeout: 10\n  verify: true\ncleanup:\n  timeout: 2\n  verify: false\n')
     request = Mock()
-    monkeypatch.setattr('certbot_httpreq.authenticator.requests.delete', request)
+    monkeypatch.setattr('acme_http_connector.connector.requests.delete', request)
     auth.cleanup([SimpleNamespace(chall=SimpleNamespace(path='/challenge'))])
     assert request.call_args.kwargs['timeout'] == 2
     assert request.call_args.kwargs['verify'] is False
@@ -75,7 +75,7 @@ def test_perform_payload_and_no_header_mutation(tmp_path, monkeypatch):
     challenge.chall.path = '/.well-known/acme-challenge/token'
     challenge.response_and_validation.return_value = (response, 'validation')
     request = Mock()
-    monkeypatch.setattr('certbot_httpreq.authenticator.requests.put', request)
+    monkeypatch.setattr('acme_http_connector.connector.requests.put', request)
     assert auth.perform([challenge]) == [response]
     assert request.call_args.kwargs['json'] == {'value': 'validation'}
     assert auth._config['perform']['headers'] == {'X-Test': 'kept'}
@@ -88,7 +88,7 @@ def test_deploy_payload_and_optional_chain(tmp_path, monkeypatch):
     cert.write_text('certificate')
     key.write_text('private-key')
     request = Mock()
-    monkeypatch.setattr('certbot_httpreq.installer.requests.post', request)
+    monkeypatch.setattr('acme_http_connector.connector.requests.post', request)
     installer.deploy_cert('example.com', str(cert), str(key), None, None)
     assert request.call_args.kwargs['json'] == {'domain': 'example.com', 'certificate': 'certificate', 'key': 'private-key', 'chain': ''}
     assert request.call_args.kwargs['verify'] is True
@@ -106,7 +106,7 @@ def test_http_failure_is_propagated(tmp_path, monkeypatch):
     auth = plugin(Authenticator, tmp_path, '{}')
     request = Mock()
     request.return_value.raise_for_status.side_effect = HTTPError('failure')
-    monkeypatch.setattr('certbot_httpreq.authenticator.requests.delete', request)
+    monkeypatch.setattr('acme_http_connector.connector.requests.delete', request)
     with pytest.raises(HTTPError):
         auth.cleanup([SimpleNamespace(chall=SimpleNamespace(path='/challenge'))])
 
@@ -124,3 +124,11 @@ def test_legacy_plugin_names_are_discoverable():
     plugins = PluginsRegistry.find_all()
     assert 'certbot-httpreq:auth' in plugins
     assert 'certbot-httpreq:installer' in plugins
+
+
+def test_authenticator_ignores_unused_deploy_settings(tmp_path):
+    plugin(Authenticator, tmp_path, 'deploy:\n  timeout: invalid\n')
+
+
+def test_installer_ignores_unused_challenge_settings(tmp_path):
+    plugin(Installer, tmp_path, 'perform:\n  timeout: invalid\n')

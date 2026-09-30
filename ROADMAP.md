@@ -10,9 +10,10 @@ Keep the project small: connect ACME clients to existing HTTP APIs.
 - Add regression tests and Certbot plugin discovery checks.
 - Refresh documentation and copyright years.
 
-## Next — shared HTTP connector
+## 0.0.21 adapter / 0.1.0 core — prepared, not published
 
-- Extract request configuration and transport into a client-independent package.
+- Extract request configuration and transport into `acme-http-connector`.
+- Build and publish the core before the dependent `certbot-httpreq` adapter.
 - Keep Certbot as a thin adapter with the existing public names.
 - Define one small contract for challenge publication, cleanup and certificate deployment.
 
