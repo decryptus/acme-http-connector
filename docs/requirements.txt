@@ -1,2 +1,3 @@
-m2r2
-PyYAML>=3.10
+Sphinx>=7,<10
+m2r2>=2.1,<3
+PyYAML>=6

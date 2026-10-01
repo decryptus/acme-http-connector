@@ -32,7 +32,11 @@ certbot plugins
 ```
 
 The independent [`acme-http-connector`](https://pypi.org/project/acme-http-connector/)
-core is installed automatically.
+core is installed automatically. Adapter **0.0.23** uses core **0.2.x**.
+
+**Using Dehydrated?** Install only `acme-http-connector` and use its
+`acme-http-dehydrated` HTTP-01 hook; Certbot is not required. See the
+[Dehydrated guide](https://github.com/decryptus/acme-http-connector#dehydrated-usage).
 
 ## Quick start
 
