@@ -2,7 +2,7 @@
 
 Connect ACME clients to your HTTP APIs.
 
-**Current adapter: Certbot. Adapter 0.0.21, core 0.1.0.**
+**Current adapter: Certbot. Adapter 0.0.22, core 0.1.1.**
 Previously named **certbot-httpreq**. The repository now builds two packages:
 `acme-http-connector` is the client-independent core; `certbot-httpreq` is the
 Certbot adapter and installs the core as a dependency. Certbot plugin names

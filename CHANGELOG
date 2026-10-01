@@ -1,3 +1,11 @@
+certbot-httpreq (0.0.22) unstable; urgency=medium
+
+  * Refresh both PyPI project descriptions with structured quick starts and API guides.
+  * Publish acme-http-connector 0.1.1 with improved package documentation.
+  * Use a dedicated Certbot package description with absolute documentation links.
+
+ -- Adrien DELLE CAVE (Decryptus) <adc@doowan.net>  Thu, 01 Oct 2026 07:23:52 +0200
+
 certbot-httpreq (0.0.21) unstable; urgency=medium
 
   * Extract acme-http-connector 0.1.0 as a Certbot-independent Python package.
