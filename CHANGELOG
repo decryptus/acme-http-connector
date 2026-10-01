@@ -1,10 +1,10 @@
-certbot-httpreq (0.0.21) UNRELEASED; urgency=medium
+certbot-httpreq (0.0.21) unstable; urgency=medium
 
   * Extract acme-http-connector 0.1.0 as a Certbot-independent Python package.
   * Keep legacy Certbot plugin names, options and configuration format.
   * Build and test both distributions; publish the core before its adapter.
 
- -- Adrien DELLE CAVE (Decryptus) <adc@doowan.net>  Wed, 30 Sep 2026 20:14:00 +0200
+ -- Adrien DELLE CAVE (Decryptus) <adc@doowan.net>  Thu, 01 Oct 2026 07:16:03 +0200
 
 certbot-httpreq (0.0.20) unstable; urgency=medium
 

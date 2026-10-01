@@ -2,11 +2,11 @@
 
 Connect ACME clients to your HTTP APIs.
 
-**Current adapter: Certbot. In development: adapter 0.0.21, core 0.1.0.**
+**Current adapter: Certbot. Adapter 0.0.21, core 0.1.0.**
 Previously named **certbot-httpreq**. The repository now builds two packages:
 `acme-http-connector` is the client-independent core; `certbot-httpreq` is the
 Certbot adapter and installs the core as a dependency. Certbot plugin names
-remain unchanged for compatibility. The last published adapter is 0.0.20. Other clients are planned,
+remain unchanged for compatibility. Other clients are planned,
 not implemented; see [ROADMAP.md](ROADMAP.md).
 
 The authenticator publishes and removes **HTTP-01** challenges through a custom
@@ -33,7 +33,7 @@ python -m pip install -e packages/core -e .
 
 ## Core API
 
-The core can be installed independently of Certbot once 0.1.0 is published:
+The core can be installed independently of Certbot:
 
 ```sh
 python -m pip install acme-http-connector
