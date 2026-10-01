@@ -43,7 +43,7 @@ class CertbotTests(unittest.TestCase):
         self.set_env('CBT_HTTPREQ_DEPLOY_VERIFY', value)
         config = {}
         set_option(config, 'deploy', 'verify')
-        assert config['verify'] == expected
+        self.assertEqual(config['verify'], expected)
 
     def test_environment_verify_2(self):
         value = 'true'
@@ -51,7 +51,7 @@ class CertbotTests(unittest.TestCase):
         self.set_env('CBT_HTTPREQ_DEPLOY_VERIFY', value)
         config = {}
         set_option(config, 'deploy', 'verify')
-        assert config['verify'] == expected
+        self.assertEqual(config['verify'], expected)
 
     def test_environment_verify_3(self):
         value = '0'
@@ -59,7 +59,7 @@ class CertbotTests(unittest.TestCase):
         self.set_env('CBT_HTTPREQ_DEPLOY_VERIFY', value)
         config = {}
         set_option(config, 'deploy', 'verify')
-        assert config['verify'] == expected
+        self.assertEqual(config['verify'], expected)
 
     def test_environment_verify_4(self):
         value = '1'
@@ -67,7 +67,7 @@ class CertbotTests(unittest.TestCase):
         self.set_env('CBT_HTTPREQ_DEPLOY_VERIFY', value)
         config = {}
         set_option(config, 'deploy', 'verify')
-        assert config['verify'] == expected
+        self.assertEqual(config['verify'], expected)
 
     def test_environment_verify_5(self):
         value = '/ca.pem'
@@ -75,20 +75,20 @@ class CertbotTests(unittest.TestCase):
         self.set_env('CBT_HTTPREQ_DEPLOY_VERIFY', value)
         config = {}
         set_option(config, 'deploy', 'verify')
-        assert config['verify'] == expected
+        self.assertEqual(config['verify'], expected)
 
     def test_explicit_false_and_defaults(self):
         self.set_env('CBT_HTTPREQ_DEPLOY_VERIFY', 'true')
         config = {'verify': False}
         set_option(config, 'deploy', 'verify')
         set_option(config, 'deploy', 'timeout')
-        assert config == {'verify': False, 'timeout': 30.0}
+        self.assertEqual(config, {'verify': False, 'timeout': 30.0})
 
     def test_environment_timeout(self):
         self.set_env('CBT_HTTPREQ_DEPLOY_TIMEOUT', '2.5')
         config = {}
         set_option(config, 'deploy', 'timeout')
-        assert config['timeout'] == 2.5
+        self.assertEqual(config['timeout'], 2.5)
 
     def test_invalid_timeout_1(self):
         value = 0
@@ -125,15 +125,15 @@ class CertbotTests(unittest.TestCase):
         for token in ['first', 'second', 'first']:
             challenge = SimpleNamespace(chall=SimpleNamespace(path='/.well-known/acme-challenge/' + token))
             query = parse_qs(urlsplit(auth._build_uri(challenge)).query)
-            assert query == {'existing': ['1'], 'token': [challenge.chall.path]}
+            self.assertEqual(query, {'existing': ['1'], 'token': [challenge.chall.path]})
 
     def test_cleanup_uses_own_settings(self):
         auth = plugin(Authenticator, self.tmp_path, 'perform:\n  timeout: 10\n  verify: true\ncleanup:\n  timeout: 2\n  verify: false\n')
         request = Mock()
         self.replace('acme_http_connector.connector.requests.delete', request)
         auth.cleanup([SimpleNamespace(chall=SimpleNamespace(path='/challenge'))])
-        assert request.call_args.kwargs['timeout'] == 2
-        assert request.call_args.kwargs['verify'] is False
+        self.assertEqual(request.call_args.kwargs['timeout'], 2)
+        self.assertIs(request.call_args.kwargs['verify'], False)
         request.return_value.raise_for_status.assert_called_once()
 
     def test_perform_payload_and_no_header_mutation(self):
@@ -145,9 +145,9 @@ class CertbotTests(unittest.TestCase):
         challenge.response_and_validation.return_value = (response, 'validation')
         request = Mock()
         self.replace('acme_http_connector.connector.requests.put', request)
-        assert auth.perform([challenge]) == [response]
-        assert request.call_args.kwargs['json'] == {'value': 'validation'}
-        assert auth._config['perform']['headers'] == {'X-Test': 'kept'}
+        self.assertEqual(auth.perform([challenge]), [response])
+        self.assertEqual(request.call_args.kwargs['json'], {'value': 'validation'})
+        self.assertEqual(auth._config['perform']['headers'], {'X-Test': 'kept'})
 
     def test_deploy_payload_and_optional_chain(self):
         installer = plugin(Installer, self.tmp_path, 'deploy:\n  body_params:\n    cert: certificate\n  headers:\n    X-Test: kept\n')
@@ -158,9 +158,9 @@ class CertbotTests(unittest.TestCase):
         request = Mock()
         self.replace('acme_http_connector.connector.requests.post', request)
         installer.deploy_cert('example.com', str(cert), str(key), None, None)
-        assert request.call_args.kwargs['json'] == {'domain': 'example.com', 'certificate': 'certificate', 'key': 'private-key', 'chain': ''}
-        assert request.call_args.kwargs['verify'] is True
-        assert installer._config['deploy']['headers'] == {'X-Test': 'kept'}
+        self.assertEqual(request.call_args.kwargs['json'], {'domain': 'example.com', 'certificate': 'certificate', 'key': 'private-key', 'chain': ''})
+        self.assertIs(request.call_args.kwargs['verify'], True)
+        self.assertEqual(installer._config['deploy']['headers'], {'X-Test': 'kept'})
 
     def test_invalid_deploy_method_fails(self):
         installer = plugin(Installer, self.tmp_path, 'deploy:\n  method: GET\n')
@@ -186,8 +186,8 @@ class CertbotTests(unittest.TestCase):
     def test_legacy_plugin_names_are_discoverable(self):
         from certbot._internal.plugins.disco import PluginsRegistry
         plugins = PluginsRegistry.find_all()
-        assert 'certbot-httpreq:auth' in plugins
-        assert 'certbot-httpreq:installer' in plugins
+        self.assertIn('certbot-httpreq:auth', plugins)
+        self.assertIn('certbot-httpreq:installer', plugins)
 
     def test_authenticator_ignores_unused_deploy_settings(self):
         plugin(Authenticator, self.tmp_path, 'deploy:\n  timeout: invalid\n')

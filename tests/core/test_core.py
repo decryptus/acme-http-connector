@@ -34,8 +34,8 @@ class CoreTests(unittest.TestCase):
         connector = HTTPConnector(config)
         for token in ['one', 'two', 'one']:
             path = '/.well-known/acme-challenge/' + token
-            assert parse_qs(urlsplit(connector.challenge_uri(path)).query) == {'existing': ['1'], 'token': [path]}
-        assert config == before
+            self.assertEqual(parse_qs(urlsplit(connector.challenge_uri(path)).query), {'existing': ['1'], 'token': [path]})
+        self.assertEqual(config, before)
 
     def test_publish_payload_1(self):
         format = 'json'
@@ -45,9 +45,9 @@ class CoreTests(unittest.TestCase):
         self.replace('acme_http_connector.connector.requests.put', request)
         connector = HTTPConnector({'perform': {'uri': 'https://api.example.com', 'path': '/publish', 'format': format, 'param_validation': 'value'}})
         connector.publish('/.well-known/acme-challenge/token', 'authorization')
-        assert request.call_args.args == ('https://api.example.com/publish/.well-known/acme-challenge/token',)
-        assert request.call_args.kwargs['json'] == expected_json
-        assert request.call_args.kwargs['data'] == expected_data
+        self.assertEqual(request.call_args.args, ('https://api.example.com/publish/.well-known/acme-challenge/token',))
+        self.assertEqual(request.call_args.kwargs['json'], expected_json)
+        self.assertEqual(request.call_args.kwargs['data'], expected_data)
         request.return_value.raise_for_status.assert_called_once()
 
     def test_publish_payload_2(self):
@@ -58,9 +58,9 @@ class CoreTests(unittest.TestCase):
         self.replace('acme_http_connector.connector.requests.put', request)
         connector = HTTPConnector({'perform': {'uri': 'https://api.example.com', 'path': '/publish', 'format': format, 'param_validation': 'value'}})
         connector.publish('/.well-known/acme-challenge/token', 'authorization')
-        assert request.call_args.args == ('https://api.example.com/publish/.well-known/acme-challenge/token',)
-        assert request.call_args.kwargs['json'] == expected_json
-        assert request.call_args.kwargs['data'] == expected_data
+        self.assertEqual(request.call_args.args, ('https://api.example.com/publish/.well-known/acme-challenge/token',))
+        self.assertEqual(request.call_args.kwargs['json'], expected_json)
+        self.assertEqual(request.call_args.kwargs['data'], expected_data)
         request.return_value.raise_for_status.assert_called_once()
 
     def test_cleanup_and_failure(self):
@@ -70,17 +70,17 @@ class CoreTests(unittest.TestCase):
         connector = HTTPConnector({'cleanup': {'timeout': 2, 'verify': '/ca.pem'}})
         with self.assertRaises(HTTPError):
             connector.cleanup('/.well-known/acme-challenge/token')
-        assert request.call_args.kwargs['timeout'] == 2
-        assert request.call_args.kwargs['verify'] == '/ca.pem'
-        assert 'json' not in request.call_args.kwargs
-        assert 'data' not in request.call_args.kwargs
+        self.assertEqual(request.call_args.kwargs['timeout'], 2)
+        self.assertEqual(request.call_args.kwargs['verify'], '/ca.pem')
+        self.assertNotIn('json', request.call_args.kwargs)
+        self.assertNotIn('data', request.call_args.kwargs)
 
     def test_deploy_pem_strings(self):
         request = Mock()
         self.replace('acme_http_connector.connector.requests.post', request)
         connector = HTTPConnector({'deploy': {'body_params': {'cert': 'certificate'}}})
         connector.deploy('example.com', 'CERT', 'KEY')
-        assert request.call_args.kwargs['json'] == {'domain': 'example.com', 'certificate': 'CERT', 'key': 'KEY', 'chain': ''}
+        self.assertEqual(request.call_args.kwargs['json'], {'domain': 'example.com', 'certificate': 'CERT', 'key': 'KEY', 'chain': ''})
 
     def test_invalid_methods_1(self):
         phase = 'perform'
@@ -108,5 +108,5 @@ class CoreTests(unittest.TestCase):
 
     def test_verification_address(self):
         connector = HTTPConnector({'perform': {'uri': 'https://api.example.com:8443'}})
-        assert connector.verification_address(5000) == ('api.example.com', 8443)
-        assert HTTPConnector().verification_address(5000) == ('localhost', 5000)
+        self.assertEqual(connector.verification_address(5000), ('api.example.com', 8443))
+        self.assertEqual(HTTPConnector().verification_address(5000), ('localhost', 5000))

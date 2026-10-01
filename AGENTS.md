@@ -3,8 +3,8 @@
 - Keep the core independent of Certbot and the ACME protocol implementation.
   Preserve existing Certbot plugin names and configuration compatibility.
 - Use `unittest`. Before reporting results, verify discovery with
-  `python .github/scripts/check-test-collection.py --runner unittest tests/core tests/certbot`.
-  Run both suites explicitly; a passing empty or partially collected suite is not validation.
+  `python .github/scripts/check-test-collection.py --runner unittest tests`.
+  Run `python -m unittest discover -s tests -v`; a passing empty or partially collected suite is not validation.
 - Check the standalone core without Certbot. For client hook changes, run the
   disposable Pebble integration check documented in README.md. Do not disable
   ACME validation to make integration tests pass.

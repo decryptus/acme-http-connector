@@ -46,9 +46,8 @@ jobs:
           PY
       - name: Test
         run: |
-          python .github/scripts/check-test-collection.py --runner unittest tests/core tests/certbot
-          python -m unittest discover -s tests/core -v
-          python -m unittest discover -s tests/certbot -v
+          python .github/scripts/check-test-collection.py --runner unittest tests
+          python -m unittest discover -s tests -v
       - name: Build distributions
         run: |
           python -m build packages/core --outdir dist/core

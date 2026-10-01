@@ -172,9 +172,8 @@ invalid HTTP methods raise an error. See [CHANGELOG](CHANGELOG).
 
 ```sh
 python -m pip install -e packages/core -e . build twine
-python .github/scripts/check-test-collection.py --runner unittest tests/core tests/certbot
-python -m unittest discover -s tests/core -v
-python -m unittest discover -s tests/certbot -v
+python .github/scripts/check-test-collection.py --runner unittest tests
+python -m unittest discover -s tests -v
 python -m build packages/core
 python -m build
 certbot plugins
