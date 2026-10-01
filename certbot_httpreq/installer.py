@@ -4,23 +4,17 @@
 """HTTP Requests Let's Encrypt installer plugin."""
 
 import os
-from pathlib import Path
 import logging
-import requests
 
 from sonicprobe import helpers
-from sonicprobe.libs import urisup
 
-from certbot import interfaces, errors
+from certbot import interfaces
 from certbot.plugins import common
 
-from certbot_httpreq.config import set_option
+from acme_http_connector import HTTPConnector
+from certbot_httpreq.config import set_option, plugin_errors
 
 LOG = logging.getLogger("certbot-httpreq")
-
-ALLOWED_HTTP_METHODS = ('put', 'post', 'patch')
-
-HTTP_BODY_PARAMS = ('domain', 'cert', 'key', 'chain')
 
 
 class Installer(common.Plugin, interfaces.Installer):
@@ -35,30 +29,14 @@ class Installer(common.Plugin, interfaces.Installer):
     def __init__(self, *args, **kwargs):
         super(Installer, self).__init__(*args, **kwargs)
         self._config = {}
-        self._uri    = None
-
-    def _build_uri(self):  # pylint: disable=missing-docstring
-        return urisup.uri_help_unsplit(self._uri)
 
     _set_option = staticmethod(set_option)
 
-    def prepare(self):  # pylint: disable=missing-docstring,no-self-use
-        self._config = helpers.load_conf_yaml_file(self.conf('config'))
-
-        if not self._config.get('deploy'):
-            self._config['deploy'] = {}
-
-        confdeploy = self._config['deploy']
-
-        self._set_option(confdeploy, 'deploy', 'uri', 'http://localhost')
-        self._set_option(confdeploy, 'deploy', 'path', '/')
-        self._set_option(confdeploy, 'deploy', 'method', 'POST')
-        self._set_option(confdeploy, 'deploy', 'format', 'json')
-        self._set_option(confdeploy, 'deploy', 'timeout')
-        self._set_option(confdeploy, 'deploy', 'verify')
-
-        self._uri    = list(urisup.uri_help_split(confdeploy['uri']))
-        self._uri[2] = confdeploy['path']
+    def prepare(self):
+        with plugin_errors():
+            self._connector = HTTPConnector(helpers.load_conf_yaml_file(self.conf('config')),
+                                            phases=('deploy',))
+        self._config = self._connector.config
 
     def more_info(self):  # pylint: disable=missing-docstring,no-self-use
         return "Installer send certificates to a custom HTTP endpoint"
@@ -66,46 +44,9 @@ class Installer(common.Plugin, interfaces.Installer):
     def get_all_names(self):  # pylint: disable=missing-docstring,no-self-use
         return []  # pragma: no cover
 
-    def deploy_cert(self, domain, cert_path, key_path, chain_path, fullchain_path):  # pylint: disable=unused-argument
-        """
-        PUT or POST or PATCH Certificate
-        """
-        method  = self._config['deploy']['method'].lower()
-
-        if method not in ALLOWED_HTTP_METHODS:
-            raise errors.PluginError("Invalid HTTP method for deploy: %s" % method)
-
-        params = dict(zip(HTTP_BODY_PARAMS, HTTP_BODY_PARAMS))
-
-        if isinstance(self._config['deploy'].get('body_params'), dict):
-            for x in HTTP_BODY_PARAMS:
-                if helpers.has_len(self._config['deploy']['body_params'].get(x)):
-                    params[x] = "%s" % self._config['deploy']['body_params'][x]
-
-        headers = {}
-        data    = {params['domain']: domain,
-                   params['cert']: Path(cert_path).read_text(),
-                   params['key']: Path(key_path).read_text(),
-                   params['chain']:  Path(chain_path).read_text() if chain_path else ''}
-        json    = None
-
-        if isinstance(self._config['deploy'].get('headers'), dict):
-            headers = dict(self._config['deploy']['headers'])
-
-        if self._config['deploy']['format'] == 'json':
-            headers['Content-Type'] = 'application/json'
-            json = data
-            data = None
-
-        req = getattr(requests, method)(self._build_uri(),
-                                        headers = headers,
-                                        data    = data,
-                                        json    = json,
-                                        timeout = self._config['deploy']['timeout'],
-                                        verify  = self._config['deploy']['verify'])
-        req.raise_for_status()
-
-        return None
+    def deploy_cert(self, domain, cert_path, key_path, chain_path, fullchain_path):
+        with plugin_errors():
+            self._connector.deploy_files(domain, cert_path, key_path, chain_path)
 
     def enhance(self, domain, enhancement, options=None):  # pylint: disable=missing-docstring,no-self-use
         pass  # pragma: no cover

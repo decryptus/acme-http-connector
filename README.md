@@ -2,9 +2,11 @@
 
 Connect ACME clients to your HTTP APIs.
 
-**Current adapter: Certbot. Version: 0.0.20.**
-Previously named **certbot-httpreq**. The Python distribution and Certbot plugin
-names remain `certbot-httpreq` for compatibility. Other clients are planned,
+**Current adapter: Certbot. In development: adapter 0.0.21, core 0.1.0.**
+Previously named **certbot-httpreq**. The repository now builds two packages:
+`acme-http-connector` is the client-independent core; `certbot-httpreq` is the
+Certbot adapter and installs the core as a dependency. Certbot plugin names
+remain unchanged for compatibility. The last published adapter is 0.0.20. Other clients are planned,
 not implemented; see [ROADMAP.md](ROADMAP.md).
 
 The authenticator publishes and removes **HTTP-01** challenges through a custom
@@ -26,8 +28,20 @@ certbot plugins
 PyPI installation uses the last published release. To install from a source checkout:
 
 ```sh
-python -m pip install -e .
+python -m pip install -e packages/core -e .
 ```
+
+## Core API
+
+The core can be installed independently of Certbot once 0.1.0 is published:
+
+```sh
+python -m pip install acme-http-connector
+```
+
+It exposes `HTTPConnector.publish`, `cleanup`, `deploy` and `deploy_files`.
+See [the core API example](packages/core/README.md). Other ACME client adapters
+remain planned; installing the core alone does not issue certificates.
 
 ## Usage
 
@@ -102,8 +116,9 @@ invalid HTTP methods raise an error. See [CHANGELOG](CHANGELOG).
 ## Development
 
 ```sh
-python -m pip install -e . pytest build
+python -m pip install -e packages/core -e . pytest build
 python -m pytest
+python -m build packages/core
 python -m build
 certbot plugins
 ```
@@ -112,9 +127,10 @@ Copyright © 2019–2026 Adrien Delle Cave. GPL-3.0-or-later.
 
 ## Publishing (maintainers)
 
-GitHub Actions publishes the existing **certbot-httpreq** distribution using
-PyPI Trusted Publishing, without a long-lived API token. Configure the publisher
-on that PyPI project with these exact values:
+GitHub Actions builds both distributions, publishes **acme-http-connector**
+first, then publishes **certbot-httpreq** using PyPI Trusted Publishing.
+Before the first core release, register a pending publisher on PyPI for the
+new project `acme-http-connector`. Both projects use these exact values:
 
 | Setting | Value |
 | --- | --- |
@@ -122,6 +138,10 @@ on that PyPI project with these exact values:
 | Repository | `acme-http-connector` |
 | Workflow | `publish.yml` |
 | Environment | `pypi` |
+
+The core version lives in `packages/core/pyproject.toml`. Release both packages
+together when changing the core, and keep the adapter dependency range current.
+The core version must be new on PyPI for this two-package release workflow.
 
 For a release, first synchronize `VERSION`, `RELEASE` and `setup.yml`, finalize
 the top `CHANGELOG` entry (replace `UNRELEASED` with `unstable`) and update the
