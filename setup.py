@@ -8,7 +8,7 @@ from setuptools import find_packages, setup
 current_dir            = os.path.abspath(os.path.dirname(__file__))
 requirements           = [line.strip() for line in open(os.path.join(current_dir, 'requirements.txt'), 'r').readlines()]
 setup_config           = os.path.join(current_dir, 'setup.yml')
-readme_file            = os.path.join(current_dir, 'README.md')
+readme_file            = os.path.join(current_dir, 'README.pypi.md')
 long_desc              = None
 long_desc_content_type = None
 
@@ -27,6 +27,12 @@ setup(
     author_email                  = setup_cfg['author_email'],
     license                       = setup_cfg['license'],
     url                           = setup_cfg['url'],
+    project_urls                  = {
+        'Documentation': setup_cfg['url'] + '#configuration',
+        'Source': setup_cfg['url'],
+        'Issues': setup_cfg['url'] + '/issues',
+        'Changelog': setup_cfg['url'] + '/blob/master/CHANGELOG',
+    },
     packages                      = find_packages(include=['certbot_httpreq', 'certbot_httpreq.*']),
     install_requires              = requirements,
     python_requires               = ', '.join(setup_cfg['python_requires']),

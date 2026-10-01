@@ -1,1 +1,1 @@
-include requirements.txt setup.yml certbot-httpreq.yml VERSION RELEASE CHANGELOG README.md ROADMAP.md LICENSE
+include requirements.txt setup.yml certbot-httpreq.yml VERSION RELEASE CHANGELOG README.md README.pypi.md ROADMAP.md LICENSE
