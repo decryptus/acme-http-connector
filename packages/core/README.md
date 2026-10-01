@@ -35,17 +35,17 @@ python -m pip install acme-http-connector
 **Using Certbot?** Install [`certbot-httpreq`](https://pypi.org/project/certbot-httpreq/)
 instead. It includes this library and provides the Certbot plugins.
 
-## Dehydrated hook (prepared for 0.2.0)
+## Dehydrated hook
 
 The package installs `acme-http-dehydrated`, a Dehydrated **0.7.2** HTTP-01 hook
 that publishes and cleans single or chained challenges and deploys issued
-certificates. No Certbot installation is required. This feature is not in the
-published core 0.1.1; install `./packages/core` from this branch to try it.
+certificates. No Certbot installation is required. The hook is included starting with
+core 0.2.0.
 
 Set Dehydrated `HOOK` to the command's absolute path and
 `CHALLENGETYPE="http-01"`. Configure API endpoints in
 `/etc/acme-http-connector.yml`, or set `ACME_HTTP_CONNECTOR_CONFIG` to another YAML
-path. See [Dehydrated setup](https://github.com/decryptus/acme-http-connector#dehydrated-usage-prepared-for-core-020)
+path. See [Dehydrated setup](https://github.com/decryptus/acme-http-connector#dehydrated-usage)
 for directory setup, issuance and renewal.
 
 Unknown lifecycle hooks succeed without action. Action hooks return nonzero on

@@ -1,10 +1,11 @@
-certbot-httpreq (0.0.23) UNRELEASED; urgency=medium
+certbot-httpreq (0.0.23) unstable; urgency=medium
 
-  * Prepare acme-http-connector 0.2.0 with a Dehydrated HTTP-01 hook.
+  * Release acme-http-connector 0.2.0 with a Dehydrated HTTP-01 hook.
   * Support single/chained challenges and certificate deployment without Certbot.
   * Use unittest with collection checks; exercise both clients against Pebble.
+  * Refresh both PyPI descriptions and rebuild HTML documentation before publication.
 
- -- Adrien DELLE CAVE (Decryptus) <adc@doowan.net>  Thu, 01 Oct 2026 07:30:00 +0200
+ -- Adrien DELLE CAVE (Decryptus) <adc@doowan.net>  Thu, 01 Oct 2026 08:03:51 +0200
 
 certbot-httpreq (0.0.22) unstable; urgency=medium
 

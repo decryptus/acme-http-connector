@@ -10,6 +10,8 @@
   ACME validation to make integration tests pass.
 - Keep README.md, both package descriptions, ROADMAP.md and CHANGELOG consistent
   with the implemented behavior and the published/development versions.
+- Build HTML documentation with warnings treated as errors before publication.
+  The publishing workflow must rebuild docs and preserve the HTML artifact.
 - Give Adrien the review and test results before merging, publishing a release
   or deploying. Wait for his explicit approval after that review. Preparing a
   branch or pull request is allowed; it does not authorize publication.
