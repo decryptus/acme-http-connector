@@ -206,37 +206,3 @@ checksums are pinned. All network listeners bind to loopback; test domains use a
 private test DNS resolver and all accounts/keys are disposable.
 
 Copyright © 2019–2026 Adrien Delle Cave. GPL-3.0-or-later.
-
-## Publishing (maintainers)
-
-GitHub Actions builds both distributions, publishes **acme-http-connector**
-first, then publishes **certbot-httpreq** using PyPI Trusted Publishing.
-Before the first core release, register a pending publisher on PyPI for the
-new project `acme-http-connector`. Both projects use these exact values:
-
-| Setting | Value |
-| --- | --- |
-| Owner | `decryptus` |
-| Repository | `acme-http-connector` |
-| Workflow | `publish.yml` |
-| Environment | `pypi` |
-
-The publication workflow rebuilds the HTML documentation and retains it as the
-`html-documentation` artifact before any package upload. Both PyPI descriptions
-are included in the built distributions and checked by Twine.
-
-The core version lives in `packages/core/pyproject.toml`. Release both packages
-together when changing the core, and keep the adapter dependency range current.
-The core version must be new on PyPI for this two-package release workflow.
-
-For a release, first synchronize `VERSION`, `RELEASE` and `setup.yml`, finalize
-the top `CHANGELOG` entry (replace `UNRELEASED` with `unstable`) and update the
-README's development status. Present the review and test results and obtain explicit approval before merging
-or publishing. After approval, merge those changes, then publish a non-prerelease
-GitHub Release tagged `v<version>` at that commit. The workflow checks version
-consistency, runs tests, builds and validates distributions, then uploads the
-same artifacts in a separate OIDC-enabled job.
-
-A manual **Run workflow** only builds and validates; it never publishes.
-Pull requests changing the publishing workflow also validate without uploading
-to PyPI.
