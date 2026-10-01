@@ -35,6 +35,24 @@ python -m pip install acme-http-connector
 **Using Certbot?** Install [`certbot-httpreq`](https://pypi.org/project/certbot-httpreq/)
 instead. It includes this library and provides the Certbot plugins.
 
+## Dehydrated hook (prepared for 0.2.0)
+
+The package installs `acme-http-dehydrated`, a Dehydrated **0.7.2** HTTP-01 hook
+that publishes and cleans single or chained challenges and deploys issued
+certificates. No Certbot installation is required. This feature is not in the
+published core 0.1.1; install `./packages/core` from this branch to try it.
+
+Set Dehydrated `HOOK` to the command's absolute path and
+`CHALLENGETYPE="http-01"`. Configure API endpoints in
+`/etc/acme-http-connector.yml`, or set `ACME_HTTP_CONNECTOR_CONFIG` to another YAML
+path. See [Dehydrated setup](https://github.com/decryptus/acme-http-connector#dehydrated-usage-prepared-for-core-020)
+for directory setup, issuance and renewal.
+
+Unknown lifecycle hooks succeed without action. Action hooks return nonzero on
+argument, configuration, file or HTTP errors; messages omit sensitive exception
+details. Failed batches stop at the first HTTP error without automatic retry or
+rollback. DNS-01 and TLS-ALPN-01 are not supported.
+
 ## Quick start
 
 ### 1. Connect your API
@@ -115,8 +133,9 @@ for allowed methods, environment variables and payload formats.
 
 ## Integration notes
 
-- **No Certbot dependency.** Import `HTTPConnector` directly from Python; other
-  ready-to-use ACME client adapters are on the [roadmap](https://github.com/decryptus/acme-http-connector/blob/master/ROADMAP.md).
+- **No Certbot dependency.** Import `HTTPConnector` directly from Python or use
+  the Dehydrated HTTP-01 hook. Other client adapters remain on the
+  [roadmap](https://github.com/decryptus/acme-http-connector/blob/master/ROADMAP.md).
 - **Explicit errors.** Invalid settings raise `ConfigurationError`. HTTP, network
   and file errors propagate to your application. Successful operations return `None`.
 - **Configuration stays yours.** The library copies the supplied mapping. Use the

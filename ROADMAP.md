@@ -17,11 +17,22 @@ Keep the project small: connect ACME clients to existing HTTP APIs.
 - Keep Certbot as a thin adapter with the existing public names.
 - Define one small contract for challenge publication, cleanup and certificate deployment.
 
+## 0.0.22 adapter / 0.1.1 core — package documentation
+
+- Improve both PyPI descriptions and link to the full configuration reference.
+
+## 0.0.23 adapter / 0.2.0 core — prepared, not published
+
+- Add a Dehydrated 0.7.2 HTTP-01 hook with single and chained challenge support.
+- Verify real issuance, renewal, deployment and validation failure with both clients against Pebble.
+- Use unittest with explicit collection checks and a Certbot-free core suite.
+- Review results and obtain approval before merge or publication.
+
 ## Later — one integration at a time
 
-- Add and document a Dehydrated hook adapter, with integration tests.
 - Evaluate acme.sh and Lego adapters against their actual extension interfaces.
 - Add DNS-01 only if a concrete use case requires it.
 
-Only Certbot is supported today. No new ACME protocol implementation, server,
+The published adapter supports Certbot. Dehydrated support is prepared in the
+unpublished core 0.2.0. No new ACME protocol implementation, server,
 dashboard or orchestration service is planned here.

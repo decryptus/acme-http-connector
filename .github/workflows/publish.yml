@@ -26,7 +26,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install build and test dependencies
-        run: python -m pip install -e packages/core -e . build twine pytest
+        run: python -m pip install -e packages/core -e . build twine
       - name: Check release version
         if: github.event_name == 'release'
         env:
@@ -45,7 +45,10 @@ jobs:
           assert 'UNRELEASED' not in Path('CHANGELOG').read_text().splitlines()[0], 'Finalize changelog before publishing'
           PY
       - name: Test
-        run: python -m pytest -q
+        run: |
+          python .github/scripts/check-test-collection.py --runner unittest tests/core tests/certbot
+          python -m unittest discover -s tests/core -v
+          python -m unittest discover -s tests/certbot -v
       - name: Build distributions
         run: |
           python -m build packages/core --outdir dist/core
