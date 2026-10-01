@@ -17,3 +17,15 @@
   branch or pull request is allowed; it does not authorize publication.
 - Do not use production domains, containers or credentials for tests. Never
   commit private keys, account state or sensitive operational logs.
+
+## Release maintenance
+
+- Keep publication procedures and publisher configuration out of README.md and
+  PyPI descriptions. These documents explain installation, configuration and use.
+- Core version: `packages/core/pyproject.toml`. Adapter version: synchronize
+  `VERSION`, `RELEASE` and `setup.yml`; keep its core dependency range current.
+- Finalize the top CHANGELOG entry and release documentation before publication.
+  Publish a non-prerelease GitHub Release tagged `v<adapter-version>` at the
+  reviewed, approved merge commit. Both package versions must be new on PyPI.
+- `publish.yml` rebuilds HTML documentation, validates distributions, publishes
+  the core first, then the Certbot adapter. Manual dispatch only validates.
