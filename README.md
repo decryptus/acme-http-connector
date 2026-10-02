@@ -206,3 +206,7 @@ checksums are pinned. All network listeners bind to loopback; test domains use a
 private test DNS resolver and all accounts/keys are disposable.
 
 Copyright © 2019–2026 Adrien Delle Cave. GPL-3.0-or-later.
+
+
+HTTP redirects are refused for publish, cleanup and deployment. Configure the final
+API URL directly; redirects do not trigger another request or count as success.

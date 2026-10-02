@@ -130,6 +130,7 @@ class CertbotTests(unittest.TestCase):
     def test_cleanup_uses_own_settings(self):
         auth = plugin(Authenticator, self.tmp_path, 'perform:\n  timeout: 10\n  verify: true\ncleanup:\n  timeout: 2\n  verify: false\n')
         request = Mock()
+        request.return_value.status_code = 200
         self.replace('acme_http_connector.connector.requests.delete', request)
         auth.cleanup([SimpleNamespace(chall=SimpleNamespace(path='/challenge'))])
         self.assertEqual(request.call_args.kwargs['timeout'], 2)
@@ -144,6 +145,7 @@ class CertbotTests(unittest.TestCase):
         challenge.chall.path = '/.well-known/acme-challenge/token'
         challenge.response_and_validation.return_value = (response, 'validation')
         request = Mock()
+        request.return_value.status_code = 200
         self.replace('acme_http_connector.connector.requests.put', request)
         self.assertEqual(auth.perform([challenge]), [response])
         self.assertEqual(request.call_args.kwargs['json'], {'value': 'validation'})
@@ -156,6 +158,7 @@ class CertbotTests(unittest.TestCase):
         cert.write_text('certificate')
         key.write_text('private-key')
         request = Mock()
+        request.return_value.status_code = 200
         self.replace('acme_http_connector.connector.requests.post', request)
         installer.deploy_cert('example.com', str(cert), str(key), None, None)
         self.assertEqual(request.call_args.kwargs['json'], {'domain': 'example.com', 'certificate': 'certificate', 'key': 'private-key', 'chain': ''})
@@ -171,6 +174,7 @@ class CertbotTests(unittest.TestCase):
         from requests import HTTPError
         auth = plugin(Authenticator, self.tmp_path, '{}')
         request = Mock()
+        request.return_value.status_code = 200
         request.return_value.raise_for_status.side_effect = HTTPError('failure')
         self.replace('acme_http_connector.connector.requests.delete', request)
         with self.assertRaises(HTTPError):
@@ -194,3 +198,4 @@ class CertbotTests(unittest.TestCase):
 
     def test_installer_ignores_unused_challenge_settings(self):
         plugin(Installer, self.tmp_path, 'perform:\n  timeout: invalid\n')
+

@@ -71,14 +71,22 @@ class HTTPConnector:
         if method not in allowed[phase]:
             raise ConfigurationError('Invalid HTTP method for %s: %s' % (phase, method))
         headers = dict(conf['headers']) if isinstance(conf.get('headers'), dict) else {}
-        options = dict(headers=headers, timeout=conf['timeout'], verify=conf['verify'])
+        options = dict(headers=headers, timeout=conf['timeout'], verify=conf['verify'],
+                       allow_redirects=False)
         if conf['format'] == 'json':
             headers['Content-Type'] = 'application/json'
         if body:
             options.update(data=None if conf['format'] == 'json' else payload,
                            json=payload if conf['format'] == 'json' else None)
         response = getattr(requests, method)(uri, **options)
-        response.raise_for_status()
+        try:
+            # A redirect could forward private keys or custom credentials.
+            # raise_for_status() alone accepts 3xx responses.
+            if 300 <= response.status_code < 400:
+                raise requests.HTTPError('HTTP redirect refused; configure the final API URL')
+            response.raise_for_status()
+        finally:
+            response.close()
 
     def publish(self, challenge_path, validation):
         """Publish key authorization text; does not perform ACME validation."""

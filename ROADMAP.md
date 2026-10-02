@@ -35,3 +35,8 @@ Keep the project small: connect ACME clients to existing HTTP APIs.
 
 The Certbot adapter and the core’s Dehydrated hook support HTTP-01. No new ACME protocol implementation, server,
 dashboard or orchestration service is planned here.
+
+
+## Unreleased hardening
+
+- [x] Reject HTTP redirects in every connector phase; require the final API URL.

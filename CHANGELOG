@@ -1,3 +1,8 @@
+Unreleased
+
+  * Refuse HTTP redirects in all connector phases and close responses.
+  * Cover redirection rejection with real local HTTP regression tests.
+
 certbot-httpreq (0.0.23) unstable; urgency=medium
 
   * Release acme-http-connector 0.2.0 with a Dehydrated HTTP-01 hook.
@@ -145,3 +150,4 @@ certbot-httpreq (0.0.1) unstable; urgency=medium
   * Initial release.
 
  -- Adrien DELLE CAVE (Decryptus) <adc@doowan.net>  Thu, 17 Oct 2019 18:47:26 +0200
+

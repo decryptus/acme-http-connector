@@ -42,6 +42,7 @@ class CoreTests(unittest.TestCase):
         expected_json = {'value': 'authorization'}
         expected_data = None
         request = Mock()
+        request.return_value.status_code = 200
         self.replace('acme_http_connector.connector.requests.put', request)
         connector = HTTPConnector({'perform': {'uri': 'https://api.example.com', 'path': '/publish', 'format': format, 'param_validation': 'value'}})
         connector.publish('/.well-known/acme-challenge/token', 'authorization')
@@ -55,6 +56,7 @@ class CoreTests(unittest.TestCase):
         expected_json = None
         expected_data = {'value': 'authorization'}
         request = Mock()
+        request.return_value.status_code = 200
         self.replace('acme_http_connector.connector.requests.put', request)
         connector = HTTPConnector({'perform': {'uri': 'https://api.example.com', 'path': '/publish', 'format': format, 'param_validation': 'value'}})
         connector.publish('/.well-known/acme-challenge/token', 'authorization')
@@ -65,6 +67,7 @@ class CoreTests(unittest.TestCase):
 
     def test_cleanup_and_failure(self):
         request = Mock()
+        request.return_value.status_code = 200
         request.return_value.raise_for_status.side_effect = HTTPError('failure')
         self.replace('acme_http_connector.connector.requests.delete', request)
         connector = HTTPConnector({'cleanup': {'timeout': 2, 'verify': '/ca.pem'}})
@@ -77,6 +80,7 @@ class CoreTests(unittest.TestCase):
 
     def test_deploy_pem_strings(self):
         request = Mock()
+        request.return_value.status_code = 200
         self.replace('acme_http_connector.connector.requests.post', request)
         connector = HTTPConnector({'deploy': {'body_params': {'cert': 'certificate'}}})
         connector.deploy('example.com', 'CERT', 'KEY')
@@ -110,3 +114,4 @@ class CoreTests(unittest.TestCase):
         connector = HTTPConnector({'perform': {'uri': 'https://api.example.com:8443'}})
         self.assertEqual(connector.verification_address(5000), ('api.example.com', 8443))
         self.assertEqual(HTTPConnector().verification_address(5000), ('localhost', 5000))
+
