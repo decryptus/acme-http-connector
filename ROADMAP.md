@@ -37,6 +37,6 @@ The Certbot adapter and the core’s Dehydrated hook support HTTP-01. No new ACM
 dashboard or orchestration service is planned here.
 
 
-## Unreleased hardening
+## Released hardening — core 0.2.1 / adapter 0.0.24
 
 - [x] Reject HTTP redirects in every connector phase; require the final API URL.
