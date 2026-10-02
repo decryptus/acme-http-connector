@@ -2,7 +2,7 @@
 
 Connect ACME clients to your HTTP APIs.
 
-**Core 0.2.0 · Certbot adapter 0.0.23 · Certbot and Dehydrated support.**
+**Core 0.2.1 · Certbot adapter 0.0.24 · Certbot and Dehydrated support.**
 Previously named **certbot-httpreq**. The repository builds two packages:
 `acme-http-connector` is the client-independent core; `certbot-httpreq` is the
 Certbot adapter and installs the core as a dependency. Certbot plugin names
@@ -206,3 +206,7 @@ checksums are pinned. All network listeners bind to loopback; test domains use a
 private test DNS resolver and all accounts/keys are disposable.
 
 Copyright © 2019–2026 Adrien Delle Cave. GPL-3.0-or-later.
+
+
+HTTP redirects are refused for publish, cleanup and deployment. Configure the final
+API URL directly; redirects do not trigger another request or count as success.

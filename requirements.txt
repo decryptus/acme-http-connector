@@ -1,4 +1,4 @@
-acme-http-connector>=0.2.0,<0.3
+acme-http-connector>=0.2.1,<0.3
 acme>=2.11,<6
 certbot>=2.11,<6
 sonicprobe>=0.3.48

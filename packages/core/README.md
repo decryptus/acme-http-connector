@@ -148,3 +148,7 @@ for allowed methods, environment variables and payload formats.
 [Report an issue](https://github.com/decryptus/acme-http-connector/issues) · [Release history](https://github.com/decryptus/acme-http-connector/releases) · [Roadmap](https://github.com/decryptus/acme-http-connector/blob/master/ROADMAP.md)
 
 Copyright © 2019–2026 Adrien Delle Cave. Licensed under **GPL-3.0-or-later**.
+
+
+HTTP redirects are refused for publish, cleanup and deployment. Configure the final
+API URL directly; redirects do not trigger another request or count as success.

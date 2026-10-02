@@ -32,7 +32,7 @@ certbot plugins
 ```
 
 The independent [`acme-http-connector`](https://pypi.org/project/acme-http-connector/)
-core is installed automatically. Adapter **0.0.23** uses core **0.2.x**.
+core is installed automatically. Adapter **0.0.24** uses core **0.2.x**.
 
 **Using Dehydrated?** Install only `acme-http-connector` and use its
 `acme-http-dehydrated` HTTP-01 hook; Certbot is not required. See the
@@ -124,3 +124,7 @@ core package. Certbot handles ACME issuance; the connector handles your HTTP API
 [Report an issue](https://github.com/decryptus/acme-http-connector/issues) · [Release history](https://github.com/decryptus/acme-http-connector/releases) · [Roadmap](https://github.com/decryptus/acme-http-connector/blob/master/ROADMAP.md)
 
 Copyright © 2019–2026 Adrien Delle Cave. Licensed under **GPL-3.0-or-later**.
+
+
+HTTP redirects are refused for publish, cleanup and deployment. Configure the final
+API URL directly; redirects do not trigger another request or count as success.
