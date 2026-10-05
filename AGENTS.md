@@ -6,7 +6,7 @@
   `python .github/scripts/check-test-collection.py --runner unittest tests`.
   Run `python -m unittest discover -s tests -v`; a passing empty or partially collected suite is not validation.
 - Check the standalone core without Certbot. For client hook changes, run the
-  disposable Pebble integration check documented in README.md. Do not disable
+  disposable Pebble integration check documented in docs/contributing.md. Do not disable
   ACME validation to make integration tests pass.
 - Keep README.md, both package descriptions, ROADMAP.md and CHANGELOG consistent
   with the implemented behavior and the published/development versions.
@@ -29,3 +29,25 @@
   reviewed, approved merge commit. Both package versions must be new on PyPI.
 - `publish.yml` rebuilds HTML documentation, validates distributions, publishes
   the core first, then the Certbot adapter. Manual dispatch only validates.
+
+## Separate user and contributor documentation
+
+- Maintain two distinct entry points and tables of contents: user documentation
+  for installation, configuration, operation, public APIs and troubleshooting;
+  contributor documentation for architecture, internals, tests, benchmarks,
+  release engineering and development plans.
+- Keep README and package descriptions focused on users. Link to the contributor
+  guide instead of embedding maintainer procedures. Library API examples belong
+  in the user guide when they are needed to integrate the library.
+- Keep registry publishing, CI setup, repository secrets and maintainer account
+  configuration out of user guides, website manuals and package descriptions.
+  Never include credential values or private infrastructure evidence in either guide.
+- Put implementation reviews and acceptance records under the contributor
+  navigation. Preserve user-facing compatibility limits, migration instructions,
+  security requirements and failure semantics in the user documentation.
+- Apply this separation to generated documentation and FR/EN website content.
+  Update source content and generators together; do not patch only generated HTML.
+- Before delivery, inspect both entry points, check links and build documentation
+  with warnings treated as errors where supported. Review README/package text and
+  the deployed manual for accidental maintainer content. Preserve private-project
+  visibility and existing review/publication approval requirements.
