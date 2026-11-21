@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "GPL-3.0-or-later"}
 authors = [{name = "Adrien Delle Cave", email = "pypi@doowan.net"}]
-dependencies = ["requests>=2.28", "sonicprobe>=0.3.48", "PyYAML>=6"]
+dependencies = ["requests>=2.28", "sonicprobe>=0.3.66", "PyYAML>=6"]
 
 [project.scripts]
 acme-http-dehydrated = "acme_http_connector.dehydrated:main"
