@@ -46,4 +46,9 @@ dashboard or orchestration service is planned here.
 - Require Sonicprobe 0.3.66 in both distributions.
 - Require Certbot/ACME 5.x; validate 5.0 and the latest available 5.x.
 - Preserve the independent core, plugin names and configuration.
-- Publication and registry verification remain pending until release gates pass.
+- Published core 0.2.2 and adapter 0.0.25 on PyPI and GitHub (tag `v0.0.25`).
+- Verified all four registry artifacts and a clean installation with Certbot/ACME 5.10.0,
+  Sonicprobe 0.3.66, both plugin entry points and no broken package requirements.
+- CI passed all 52 unit tests on the supported Certbot lanes, the 29-test standalone
+  core suite, real Pebble client scenarios, distributions and strict documentation.
+- This maintenance release does not deploy or renew any production certificate.
