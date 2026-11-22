@@ -23,7 +23,7 @@ and configuration options are preserved for existing Certbot installations.
 
 ## Installation
 
-Requires **Python 3.10+** and **Certbot 2.11–5.x**. Install in the same Python
+Requires **Python 3.10+** and **Certbot 5.x**. Install in the same Python
 environment as Certbot; a separate pip environment does not extend a snap installation.
 
 ```bash
@@ -32,7 +32,7 @@ certbot plugins
 ```
 
 The independent [`acme-http-connector`](https://pypi.org/project/acme-http-connector/)
-core is installed automatically. Adapter **0.0.24** uses core **0.2.x**.
+core is installed automatically. Adapter **0.0.25** uses core **0.2.x**.
 
 **Using Dehydrated?** Install only `acme-http-connector` and use its
 `acme-http-dehydrated` HTTP-01 hook; Certbot is not required. See the
@@ -95,6 +95,13 @@ the complete certificate, including its additional names.
 
 Use `certbot renew --dry-run` with a test API first: challenge publication and
 cleanup still make real HTTP requests.
+
+## Migration to Certbot 5
+
+Adapter 0.0.25 requires Certbot and ACME 5.x with Sonicprobe 0.3.66 or newer.
+Upgrade Certbot and the adapter together in their existing Python environment;
+Certbot 2.x–4.x are no longer supported. Plugin names and configuration stay the same.
+Verify renewal against a staging CA and a test deployment API before production.
 
 ## Configuration
 

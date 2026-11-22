@@ -1,6 +1,8 @@
 name: Publish to PyPI
 
 on:
+  push:
+    branches: [release/publish-0.0.25]
   pull_request:
     paths:
       - '.github/workflows/publish.yml'
@@ -28,9 +30,9 @@ jobs:
       - name: Install build and test dependencies
         run: python -m pip install -e packages/core -e . build twine -r docs/requirements.txt
       - name: Check release version
-        if: github.event_name == 'release'
+        if: github.event_name == 'release' || github.event_name == 'push'
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || 'v0.0.25' }}
         run: |
           python - <<'PY'
           import os
@@ -67,9 +69,39 @@ jobs:
           path: dist/
           if-no-files-found: error
 
-  publish-core:
-    if: github.event_name == 'release' && !github.event.release.prerelease && github.repository == 'decryptus/acme-http-connector'
+  release:
+    if: github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/release/publish-0.0.25')
     needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Publish the approved merge as a GitHub release
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          test "$(gh api repos/$GH_REPO/git/ref/heads/master --jq .object.sha)" = "$GITHUB_SHA"
+          test "$(cat VERSION)" = '0.0.25'
+          if gh release view v0.0.25 --json targetCommitish --jq .targetCommitish > release-target.txt; then
+            test "$(cat release-target.txt)" = "$GITHUB_SHA"
+          else
+            python - <<'PYNOTES'
+          from pathlib import Path
+          changelog = Path('CHANGELOG').read_text()
+          Path('release-notes.txt').write_text(changelog.split('\ncertbot-httpreq (', 1)[0])
+          PYNOTES
+            gh release create v0.0.25 --target "$GITHUB_SHA" --title 'Certbot adapter 0.0.25 / core 0.2.2' --notes-file release-notes.txt
+          fi
+
+  publish-core:
+    if: (github.event_name == 'release' && !github.event.release.prerelease || github.event_name == 'push' && github.ref == 'refs/heads/release/publish-0.0.25') && github.repository == 'decryptus/acme-http-connector'
+    needs: [build, release]
     runs-on: ubuntu-latest
     environment:
       name: pypi
@@ -87,7 +119,7 @@ jobs:
           packages-dir: dist/core/
 
   publish-adapter:
-    if: github.event_name == 'release' && !github.event.release.prerelease && github.repository == 'decryptus/acme-http-connector'
+    if: (github.event_name == 'release' && !github.event.release.prerelease || github.event_name == 'push' && github.ref == 'refs/heads/release/publish-0.0.25') && github.repository == 'decryptus/acme-http-connector'
     needs: publish-core
     runs-on: ubuntu-latest
     environment:

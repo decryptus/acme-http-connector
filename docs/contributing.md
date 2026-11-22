@@ -43,3 +43,12 @@ private test DNS resolver and all accounts/keys are disposable.
 ## Documentation rules
 
 Keep user instructions and contributor material separate. The repository [engineering requirements](https://github.com/decryptus/acme-http-connector/blob/master/AGENTS.md) define the review and validation rules. Preserve user-facing compatibility, security and recovery guidance when moving internal explanations.
+
+## Sonicprobe maintenance release
+
+The 0.2.2 core / 0.0.25 adapter release requires Certbot and ACME 5.x.
+CI covers 5.0 on Python 3.10 and the latest 5.x on Python 3.12.
+After review and successful CI, move `release/publish-0.0.25` to the approved
+master merge commit to run the existing documentation, distribution and PyPI
+gates. That explicit release branch creates GitHub tag `v0.0.25` at the same
+commit; the core is published before the adapter. Manual dispatch only validates.

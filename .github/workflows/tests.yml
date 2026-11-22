@@ -9,8 +9,8 @@ jobs:
       matrix:
         include:
           - python: '3.10'
-            certbot: 'certbot==2.11.*'
-            acme: 'acme==2.11.*'
+            certbot: 'certbot==5.0.*'
+            acme: 'acme==5.0.*'
           - python: '3.12'
             certbot: 'certbot>=5,<6'
             acme: 'acme>=5,<6'
