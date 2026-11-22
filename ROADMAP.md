@@ -40,3 +40,10 @@ dashboard or orchestration service is planned here.
 ## Released hardening — core 0.2.1 / adapter 0.0.24
 
 - [x] Reject HTTP redirects in every connector phase; require the final API URL.
+
+## Sonicprobe maintenance — core 0.2.2 / adapter 0.0.25
+
+- Require Sonicprobe 0.3.66 in both distributions.
+- Require Certbot/ACME 5.x; validate 5.0 and the latest available 5.x.
+- Preserve the independent core, plugin names and configuration.
+- Publication and registry verification remain pending until release gates pass.

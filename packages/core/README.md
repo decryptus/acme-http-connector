@@ -26,7 +26,8 @@ the challenge to the certificate authority.
 
 ## Installation
 
-Requires **Python 3.10 or newer**.
+Requires **Python 3.10 or newer**. Core **0.2.2** requires Sonicprobe **0.3.66** or newer;
+it remains independent of Certbot.
 
 ```bash
 python -m pip install acme-http-connector

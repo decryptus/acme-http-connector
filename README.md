@@ -2,7 +2,7 @@
 
 Connect ACME clients to your HTTP APIs.
 
-**Core 0.2.1 · Certbot adapter 0.0.24 · Certbot and Dehydrated support.**
+**Core 0.2.2 · Certbot adapter 0.0.25 · Certbot and Dehydrated support.**
 Previously named **certbot-httpreq**. The repository builds two packages:
 `acme-http-connector` is the client-independent core; `certbot-httpreq` is the
 Certbot adapter and installs the core as a dependency. Certbot plugin names
@@ -16,8 +16,8 @@ this connector does not run an ACME server or HTTP challenge server.
 
 ## Installation
 
-Python 3.10+ and Certbot 2.11–5.x are the supported target range. CI checks Certbot
-2.11 and the latest available 5.x. Install the plugin in the **same Python
+Python 3.10+ and Certbot 5.x are the supported target range. CI checks Certbot
+5.0 and the latest available 5.x. Install the plugin in the **same Python
 environment** as Certbot; a separate pip environment does not extend a snap.
 
 ```sh
@@ -30,6 +30,13 @@ PyPI installation uses the last published release. To install from a source chec
 ```sh
 python -m pip install -e packages/core -e .
 ```
+
+## Migration to Certbot 5
+
+Adapter 0.0.25 requires Certbot and ACME 5.x with Sonicprobe 0.3.66 or newer.
+Upgrade Certbot and the adapter together in their existing Python environment;
+Certbot 2.x–4.x are no longer supported. Plugin names and configuration stay the same.
+Verify renewal against a staging CA and a test deployment API before production.
 
 ## Core API
 
