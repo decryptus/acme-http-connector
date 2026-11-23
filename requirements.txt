@@ -2,4 +2,4 @@ acme-http-connector>=0.2.2,<0.3
 acme>=5.0,<6
 certbot>=5.0,<6
 sonicprobe>=0.3.66
-PyYAML>=6
+PyYAML>=6.0.3
