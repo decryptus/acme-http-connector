@@ -52,7 +52,7 @@ jobs:
           python -m unittest discover -s tests -v
       - name: Rebuild release documentation
         run: python -m sphinx -W --keep-going -b html docs docs/_build/html
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: html-documentation
           path: docs/_build/html/
@@ -63,7 +63,7 @@ jobs:
           python -m build --outdir dist/adapter
       - name: Validate distributions
         run: python -m twine check --strict dist/core/* dist/adapter/*
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: python-distributions
           path: dist/
