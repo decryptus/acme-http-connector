@@ -8,7 +8,16 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    versioning-strategy: increase-if-necessary
+    groups:
+      pip-minor-patch:
+        update-types: [minor, patch]
+      pip-major:
+        update-types: [major]
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    groups:
+      github-actions:
+        patterns: ['*']
