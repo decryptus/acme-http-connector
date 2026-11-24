@@ -12,9 +12,6 @@
   with the implemented behavior and the published/development versions.
 - Build HTML documentation with warnings treated as errors before publication.
   The publishing workflow must rebuild docs and preserve the HTML artifact.
-- Give Adrien the review and test results before merging, publishing a release
-  or deploying. Wait for his explicit approval after that review. Preparing a
-  branch or pull request is allowed; it does not authorize publication.
 - Do not use production domains, containers or credentials for tests. Never
   commit private keys, account state or sensitive operational logs.
 
