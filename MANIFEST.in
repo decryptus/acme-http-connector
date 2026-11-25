@@ -1,1 +1,11 @@
-include requirements.txt setup.yml certbot-httpreq.yml VERSION RELEASE CHANGELOG README.md README.pypi.md ROADMAP.md LICENSE
+include requirements.txt setup.yml certbot-httpreq.yml VERSION RELEASE README.md README.pypi.md LICENSE
+
+# Repository and maintainer material never ships in the source distribution.
+prune tests
+prune textual_tests
+prune docs
+prune scripts
+prune .github
+prune debian
+prune docker
+global-exclude __pycache__ *.py[cod]
