@@ -4,6 +4,8 @@ Keep the project small: connect ACME clients to existing HTTP APIs.
 
 ## 0.0.20 — maintenance and new project identity
 
+Status: released and published on PyPI (tag `v0.0.20`).
+
 - Preserve the `certbot-httpreq` package, plugin entry points, configuration path and environment variables.
 - Fix cleanup settings, challenge URL state, typed configuration and build dependencies.
 - Use explicit TLS verification and finite HTTP timeouts by default.
@@ -12,6 +14,8 @@ Keep the project small: connect ACME clients to existing HTTP APIs.
 
 ## 0.0.21 adapter / 0.1.0 core — shared HTTP connector
 
+Status: released and published on PyPI (tag `v0.0.21`).
+
 - Extract request configuration and transport into `acme-http-connector`.
 - Build and publish the core before the dependent `certbot-httpreq` adapter.
 - Keep Certbot as a thin adapter with the existing public names.
@@ -19,9 +23,13 @@ Keep the project small: connect ACME clients to existing HTTP APIs.
 
 ## 0.0.22 adapter / 0.1.1 core — package documentation
 
+Status: released and published on PyPI (tag `v0.0.22`).
+
 - Improve both PyPI descriptions and link to the full configuration reference.
 
 ## 0.0.23 adapter / 0.2.0 core — Certbot and Dehydrated
+
+Status: released and published on PyPI (tag `v0.0.23`).
 
 - Add a Dehydrated 0.7.2 HTTP-01 hook with single and chained challenge support.
 - Verify real issuance, renewal, deployment and validation failure with both clients against Pebble.
