@@ -20,13 +20,14 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - uses: actions/setup-python@v7
         with:
-          python-version: '3.12'
+          python-version: '3.13'
       - name: Install build and test dependencies
         run: python -m pip install -e packages/core -e . build twine -r docs/requirements.txt
       - name: Check release version
@@ -114,7 +115,7 @@ jobs:
           name: python-distributions
           path: dist/
       - name: Publish using PyPI Trusted Publishing
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           packages-dir: dist/core/
 
@@ -133,6 +134,6 @@ jobs:
           name: python-distributions
           path: dist/
       - name: Publish adapter using PyPI Trusted Publishing
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           packages-dir: dist/adapter/
